@@ -38,7 +38,7 @@ def scaled_dot_product_attention(q, k, v, mask=None):
         else:
             logits = logits + mask.to(dtype=logits.dtype)
     weights = torch.softmax(logits, dim=-1)
-    weights = torch.nan_to_num(weights, nan=0.0)
+    weights = torch.where(torch.isnan(weights), 0.0, weights)
     return torch.matmul(weights, v), weights
 
 
