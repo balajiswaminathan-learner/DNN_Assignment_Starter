@@ -1,0 +1,8 @@
+Temperature 0.2
+[Generate and paste exactly 500 characters here.]
+
+Temperature 0.8
+[Generate and paste exactly 500 characters here.]
+
+Temperature 1.5
+[Generate and paste exactly 500 characters here.]
