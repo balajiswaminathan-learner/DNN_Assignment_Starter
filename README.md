@@ -1,38 +1,57 @@
-# DNN Assignment
+# DNN Assignment 2: RNN, LSTM, GRU and Transformer
 
-## Environment and execution
+Scratch PyTorch recurrent cells and attention are checked against reference outputs.
+Problem 1 evaluates recurrent models on UCI HAR and adding; Problem 2 evaluates
+Transformer encoders on HAR and character-level language modelling.
 
-Python 3.10+; install the pinned packages with `python -m pip install -r requirements.txt`.
-The recorded runs were executed on a personal Windows laptop with PyTorch
-DirectML (`privateuseone:0`). The GPU model was not captured. The notebooks
-save their execution outputs and generated figures under `problem1/` and
-`problem2/`.
+| Student  | Student ID  | Executed values                                                                |
+|----------|-------------|--------------------------------------------------------------------------------|
+| BALAJI S | 2026AK05103 | RNN/LSTM/GRU hidden size 64; LM width 128, 4 heads, 4 layers; seeds 11, 21, 31 |
 
-Place UCI HAR at `problem1/data/UCI HAR Dataset` (or set `HAR_ROOT` in the
-Problem 1 notebook). Problem 2 downloads Tiny Shakespeare to its `data/`
-folder when needed. Restart and run `problem1/problem1.ipynb`, then
-`problem2/problem2.ipynb`, top to bottom. The Problem 2 notebook uses the
-Problem 1 HAR results.
+**5(c) ablation:** ID last digit 3; LSTM forget-gate bias 0 vs. 1 at T=200.
+**Hardware:** Personal Windows laptop, PyTorch DirectML (`privateuseone:0`);
+GPU model not recorded. **T4 runtime:** not measured; no Colab T4 run was
+performed. Recorded timings below are laptop measurements.
 
-## Recorded variant and runtime
+## Results at a glance
 
-The executed settings were hidden size 64, Transformer width 128, seeds
-11/21/31, and student-ID last digit 3 (forget-gate bias ablation). Measured
-mean HAR training time per epoch was 8.56 s (RNN), 18.86 s (LSTM), and
-21.04 s (GRU) in Problem 1; Problem 2 encoder variants took about 4.37–4.67
-s/epoch. The 5,000-step character model averaged 0.244 s/step.
+HAR and ablation values are mean ± sample SD over 3 seeds.
 
-**T4 total runtime was not measured**: the recorded runs used the laptop's
-DirectML backend, not a Colab T4. Timings are device- and backend-specific.
-The installed DirectML backend warned that an Adam `lerp` operation falls
-back to CPU, which can affect performance.
+**Problem 1 HAR, hidden size 64**
 
-## Deliverables and limitations
+| Model | Test accuracy | Macro-F1       | Parameters |
+|-------|--------------:|---------------:|-----------:|
+| RNN   | 0.623 ± 0.056 | 0.577 ± 0.097  |      5,190 |
+| LSTM  | 0.826 ± 0.067 | 0.822 ± 0.073  |     19,590 |
+| GRU   | 0.868 ± 0.011 | 0.867 ± 0.011  |     14,790 |
 
-See [REPORT.pdf](./REPORT.pdf) for the results and analysis. The notebook's
-three 500-character samples are in [generated_samples.txt](./generated_samples.txt).
-The language model reaches 2.3768 validation bits/character. The adding
-problem is solved by the GRU at T=50, but not at T=100–400; the RNN and LSTM
-do not meet the recorded solved threshold. The no-causal-mask language-model
-result leaks future tokens and is shown only as an ablation, not a valid
-language-model score.
+**Adding task: runs solved (test MSE < 0.05) out of 3**
+
+| Model | T = 50 | T = 100 | T = 200 | T = 400 |
+|-------|-------:|--------:|--------:|--------:|
+| RNN   |    0/3 |     0/3 |     0/3 |     0/3 |
+| LSTM  |    0/3 |     0/3 |     0/3 |     0/3 |
+| GRU   |    3/3 |     0/3 |     0/3 |     0/3 |
+
+**Problem 2:** HAR encoder accuracy—none 0.914 ± 0.007, learned 0.907 ± 0.007,
+sinusoidal 0.900 ± 0.011. Character LM (5,000 steps): 1.6475 validation nats
+(2.3768 bits/character).
+
+## Quick start
+
+1. Install: `python -m pip install -r requirements.txt`.
+2. Put UCI HAR in `problem1/data/UCI HAR Dataset` (or set `HAR_ROOT`).
+3. From the repository root, **Restart and Run All** on `problem1/problem1.ipynb`,
+   then `problem2/problem2.ipynb`. Problem 2 uses Problem 1 results; Tiny
+   Shakespeare downloads to `problem2/data/` if absent.
+
+Mean laptop timings: HAR 8.56 s/epoch (RNN), 18.86 (LSTM), 21.04 (GRU);
+encoder 4.37–4.67 s/epoch; language model 0.244 s/step. DirectML warned that
+an Adam `lerp` operation falls back to CPU.
+
+## Files and notes
+
+- [REPORT.pdf](./REPORT.pdf): results, figures, analysis, AI-use statement, and references.
+- [generated_samples.txt](./generated_samples.txt): three labelled 500-character samples (temperatures 0.2, 0.8, 1.5).
+- Results: `problem1/results.csv`, `problem2/results.csv`; figures are under each problem's `figures/`.
+- Context memory is an attention-score estimate, not measured GPU peak memory. The no-mask result leaks future tokens and is not a valid language-model score.
