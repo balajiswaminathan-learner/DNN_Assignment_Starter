@@ -1,46 +1,38 @@
-# DNN Programming Assignment Starter
+# DNN Assignment
 
-## Environment
+## Environment and execution
 
-Python 3.10+ and the pinned dependencies in `requirements.txt` are expected.
-Run `python -m pip install -r requirements.txt` in a fresh environment.
-For long runs, use a Colab T4 GPU. HAR and the recurrent experiments also work
-on CPU; the full character language model is intended for a GPU.
+Python 3.10+; install the pinned packages with `python -m pip install -r requirements.txt`.
+The recorded runs were executed on a personal Windows laptop with PyTorch
+DirectML (`privateuseone:0`). The GPU model was not captured. The notebooks
+save their execution outputs and generated figures under `problem1/` and
+`problem2/`.
 
-## Data
+Place UCI HAR at `problem1/data/UCI HAR Dataset` (or set `HAR_ROOT` in the
+Problem 1 notebook). Problem 2 downloads Tiny Shakespeare to its `data/`
+folder when needed. Restart and run `problem1/problem1.ipynb`, then
+`problem2/problem2.ipynb`, top to bottom. The Problem 2 notebook uses the
+Problem 1 HAR results.
 
-Download and extract UCI HAR so the directory `UCI HAR Dataset` contains
-`train/`, `test/`, the label/subject files, and `Inertial Signals/`. Place it
-at `data/UCI HAR Dataset` (or set `HAR_ROOT` in the notebook).
-Tiny Shakespeare is downloaded by the Problem 2 notebook to `data/`.
-No model checkpoints or datasets should be included in the submitted zip.
+## Recorded variant and runtime
 
-## Run order
+The executed settings were hidden size 64, Transformer width 128, seeds
+11/21/31, and student-ID last digit 3 (forget-gate bias ablation). Measured
+mean HAR training time per epoch was 8.56 s (RNN), 18.86 s (LSTM), and
+21.04 s (GRU) in Problem 1; Problem 2 encoder variants took about 4.37–4.67
+s/epoch. The 5,000-step character model averaged 0.244 s/step.
 
-1. Open `problem1/problem1.ipynb`; set your variant values in its first setup
-   cell, then run all cells. The code creates a subject-wise validation split,
-   computes training-only normalization statistics, generates the adding
-   problem, and trains the standard-library recurrent baselines.
-2. Implement and verify the scratch cells in `problem1/from_scratch.py`, then
-   complete the notebook's cell-comparison section.
-3. Open `problem2/problem2.ipynb`. Implement the required attention, MHA and
-   encoder block in `problem2/from_scratch.py` before running dependent cells.
-4. Save notebook outputs and call `results.append_result(...)` after every
-   measured run to append a row to the supplied `results.csv`.
+**T4 total runtime was not measured**: the recorded runs used the laptop's
+DirectML backend, not a Colab T4. Timings are device- and backend-specific.
+The installed DirectML backend warned that an Adam `lerp` operation falls
+back to CPU, which can affect performance.
 
-The notebook run time depends on epochs, model variant and hardware; time a
-small pilot run and report the full observed T4 runtime. Do not report example
-or placeholder results as measured results.
+## Deliverables and limitations
 
-## Student-specific settings
-
-The supplied DOCX refers to an individualisation table but does not contain
-that table. Set the hidden size, Transformer width and three prescribed seeds
-in the notebook after obtaining the mapping from the instructor. The starter
-uses clearly labelled provisional values only.
-
-## Incomplete by design
-
-The scratch implementations, experimental results, figures, report PDF,
-generated samples and AI-use declaration must be completed by the student.
-`results.csv` starts with the required schema and no fabricated results.
+See [REPORT.pdf](./REPORT.pdf) for the results and analysis. The notebook's
+three 500-character samples are in [generated_samples.txt](./generated_samples.txt).
+The language model reaches 2.3768 validation bits/character. The adding
+problem is solved by the GRU at T=50, but not at T=100–400; the RNN and LSTM
+do not meet the recorded solved threshold. The no-causal-mask language-model
+result leaks future tokens and is shown only as an ablation, not a valid
+language-model score.

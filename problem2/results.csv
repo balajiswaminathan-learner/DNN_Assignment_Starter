@@ -28,3 +28,32 @@ problem2_context_benchmark,d128_h4_l4,,64,,,,810049,,,,batch=1; sec_per_step=0.0
 problem2_context_benchmark,d128_h4_l4,,128,,,,810049,,,,batch=1; sec_per_step=0.034748; CPU attention-score estimate bytes=1048576
 problem2_context_benchmark,d128_h4_l4,,256,,,,810049,,,,batch=1; sec_per_step=0.042100; CPU attention-score estimate bytes=4194304
 problem2_context_benchmark,d128_h4_l4,,512,,,,810049,,,,batch=1; sec_per_step=0.074741; CPU attention-score estimate bytes=16777216
+problem2_har,encoder_none,11,128,0.9199185612487275,0.9203031736376815,,407046,4.543822550016921,0.30459387860535647,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_sinusoidal,11,128,0.9127926705123854,0.9133329002719144,,407046,4.324583349982277,0.25934507743972446,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_learned,11,128,0.8998982015609094,0.8981044510063511,,409222,4.708237079996616,0.40831843174632715,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_none,21,128,0.9151679674244995,0.9157629047445641,,407046,4.566408309980761,0.20846179566975964,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_sinusoidal,21,128,0.8910756701730573,0.8914215568462202,,407046,4.300868920003995,0.20123412205993785,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_learned,21,128,0.9127926705123854,0.9137296100533449,,409222,4.593979369988665,0.22732353975425737,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_none,31,128,0.9063454360366474,0.9060105482125128,,407046,4.64524716999149,0.38462376175627777,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_sinusoidal,31,128,0.8961655921275874,0.8958531712694455,,407046,4.481150630023331,0.3977459949567214,,d=128; heads=4; layers=2; patch=8
+problem2_har,encoder_learned,31,128,0.9093993892093655,0.9087051554030131,,409222,4.693740840011742,0.2914806604017448,,d=128; heads=4; layers=2; patch=8
+problem2_char_lm,causal_transformer,11,128,,,,810049,,1.6474674761295318,2.376793157837932,d=128; heads=4; layers=4; steps=5000; sec_per_step=5.283832
+problem2_heads_ablation,heads_1,11,128,,,,810049,,2.019093471765518,2.9129361388073933,d=128; layers=4; steps=1000; sec_per_step=0.246209
+problem2_heads_ablation,heads_4,11,128,,,,810049,,2.024022698402405,2.9200475096318477,d=128; layers=4; steps=1000; sec_per_step=0.265501
+problem2_heads_ablation,heads_8,11,128,,,,810049,,2.0377249360084533,2.939815659875176,d=128; layers=4; steps=1000; sec_per_step=0.300020
+problem2_causal_mask_ablation,causal_mask,11,128,,,,810049,,2.024022674560547,2.9200474752353176,d=128; heads=4; layers=4; steps=1000; sec_per_step=0.261730
+problem2_causal_mask_ablation,no_causal_mask,11,128,,,,810049,,0.02948317099362612,0.042535224582185734,d=128; heads=4; layers=4; steps=1000; sec_per_step=0.259301
+problem2_heads_ablation,heads_1,21,128,,,,810049,,2.0097314774990083,2.8994296361062686,d=128; layers=4; steps=1000; sec_per_step=0.257695
+problem2_heads_ablation,heads_4,21,128,,,,810049,,2.024098664522171,2.9201571055761097,d=128; layers=4; steps=1000; sec_per_step=0.287599
+problem2_heads_ablation,heads_8,21,128,,,,810049,,2.0387996315956114,2.9413661178692343,d=128; layers=4; steps=1000; sec_per_step=0.297063
+problem2_causal_mask_ablation,causal_mask,21,128,,,,810049,,2.0240987062454225,2.920157165770038,d=128; heads=4; layers=4; steps=1000; sec_per_step=0.256950
+problem2_causal_mask_ablation,no_causal_mask,21,128,,,,810049,,0.027659063786268236,0.0399035941600807,d=128; heads=4; layers=4; steps=1000; sec_per_step=0.251824
+problem2_heads_ablation,heads_1,31,128,,,,810049,,2.0036826491355897,2.8907030214231764,d=128; layers=4; steps=1000; sec_per_step=0.233298
+problem2_heads_ablation,heads_4,31,128,,,,810049,,2.020793855190277,2.915389273541903,d=128; layers=4; steps=1000; sec_per_step=0.258452
+problem2_heads_ablation,heads_8,31,128,,,,810049,,2.021433115005493,2.9163115305071545,d=128; layers=4; steps=1000; sec_per_step=0.294134
+problem2_causal_mask_ablation,causal_mask,31,128,,,,810049,,2.0207938611507417,2.9153892821410357,d=128; heads=4; layers=4; steps=1000; sec_per_step=0.253866
+problem2_causal_mask_ablation,no_causal_mask,31,128,,,,810049,,0.028373916074633597,0.040934908011473536,d=128; heads=4; layers=4; steps=1000; sec_per_step=0.249152
+problem2_context_benchmark,d128_h4_l4,,64,,,,810049,,,,batch=1; sec_per_step=0.035214; CPU attention-score estimate bytes=262144
+problem2_context_benchmark,d128_h4_l4,,128,,,,810049,,,,batch=1; sec_per_step=0.035011; CPU attention-score estimate bytes=1048576
+problem2_context_benchmark,d128_h4_l4,,256,,,,810049,,,,batch=1; sec_per_step=0.039294; CPU attention-score estimate bytes=4194304
+problem2_context_benchmark,d128_h4_l4,,512,,,,810049,,,,batch=1; sec_per_step=0.048312; CPU attention-score estimate bytes=16777216

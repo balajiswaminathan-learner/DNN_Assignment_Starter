@@ -6,7 +6,12 @@ import torch
 import torch.nn.functional as F
 
 from problem1.data import assert_adding_data, load_har, make_adding
-from problem1.models import RecurrentClassifier, RecurrentRegressor, count_parameters
+from problem1.models import (
+    RecurrentClassifier,
+    RecurrentRegressor,
+    count_parameters,
+    run_recurrent_module,
+)
 from problem1.train import (
     evaluate_classifier,
     make_loader,
@@ -250,11 +255,23 @@ def _hidden_gradient_norms(model, x, y, device: torch.device) -> np.ndarray:
     model.zero_grad(set_to_none=True)
     x = torch.as_tensor(x, dtype=torch.float32, device=device)
     y = torch.as_tensor(y, dtype=torch.float32, device=device)
-    sequence_states, _ = model.recurrent(x)
-    sequence_states.retain_grad()
-    prediction = model.regressor(sequence_states[:, -1]).squeeze(-1)
+    state = None
+    hidden_states = []
+    for time_index in range(x.shape[1]):
+        _, state = run_recurrent_module(
+            model.recurrent, x[:, time_index : time_index + 1], state
+        )
+        hidden = state[0] if model.cell == "LSTM" else state
+        hidden.retain_grad()
+        hidden_states.append(hidden)
+    prediction = model.regressor(hidden_states[-1][-1]).squeeze(-1)
     F.mse_loss(prediction, y).backward()
-    return sequence_states.grad.norm(dim=2).mean(dim=0).detach().cpu().numpy()
+    return (
+        torch.stack([hidden.grad[-1].norm(dim=1).mean() for hidden in hidden_states])
+        .detach()
+        .cpu()
+        .numpy()
+    )
 
 
 def _plot_adding_learning_curves(histories, figure_dir: str | Path) -> Path:
